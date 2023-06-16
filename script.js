@@ -25,20 +25,41 @@ let windowHeight = window.innerHeight;
 
 
 
-(function () {
+(async function () {
     winner = localStorage.getItem(storeName);
     maxScore = localStorage.getItem(storeScore);
 
     if (rod == null || maxScore == null) {
-        alert("This is the first time you are playing this game. LET'S START");
+        await Swal.fire({
+            title: 'This is the first time you are playing this game.',
+            width: 600,
+            padding: '3em',
+            color: '#716add',
+            background: '#fff url(./images/trees.png)',
+            confirmButtonText: 'Let\'s Start!',
+            backdrop: `
+              rgba(0,0,123,0.4)
+              url("./images/nyan-cat.gif")
+              left top
+              no-repeat
+            `
+          });//This is the first time you are playing this game. LET'S START
         maxScore = 0;
         rod = "Rod1";
     } else {
         alert(winner + " has maximum score of " + maxScore * 100);
     }
     // alert("Press Enter to start the game!");
-    alert("Use keys \"A\" and \"D\" to move the rod in left or right direction respectively!");
-    alert("Advise: In case of any glitch, just click once or twice anywhere on your screen");
+    await Swal.fire({
+        title: 'Use keys \"A\" and \"D\" to move the rod in left or right direction respectively!',
+        color: '#716add',
+        icon: 'info'
+    });//Use keys \"A\" and \"D\" to move the rod in left or right direction respectively!
+    await Swal.fire({
+        title: 'Advise: In case of any glitch, just click once or twice anywhere on your screen',
+        color: '#716add',
+        icon: 'warning'
+    });//Advise: In case of any glitch, just click once or twice anywhere on your screen
     resetBoard(rod);
 })();
 
@@ -62,7 +83,11 @@ function resetBoard(rodName) {
     
     score = 0;
     gameOn = false;
-    alert("Press Enter to start the game!");
+    Swal.fire({
+        title: 'Press Enter to start the game!',
+        color: '#716add',
+        icon: 'success'
+    });//Press Enter to start the game!
 
 
 }
@@ -79,7 +104,7 @@ function storeWin(rod,winner,score) {
     }
 
     // alert(winner + " wins with a score of " + (score * 100) + ". Max score is: " + (maxScore * 100));
-    clearInterval(movement);
+    // clearInterval(movement);
     resetBoard(rod);
 
     // alert(winner + " wins with a score of " + (score * 100) + ". Max score is: " + (maxScore * 100));
@@ -118,7 +143,7 @@ function toMove(e) {
             let rod2Width = rod2.offsetWidth;
 
 
-            movement = setInterval(function () {
+            movement = setInterval(async function () {
                 // Move ball 
                 ballX += ballSpeedX;
                 ballY += ballSpeedY;
@@ -144,13 +169,23 @@ function toMove(e) {
 
                     // Check if the game ends
                     if ((ballPos < rod1X) || (ballPos > (rod1X + rod1Width))) {
+                        clearInterval(movement);
                         if(score > maxScore){
-                            winner = prompt("Congrats! You have surpassed the max-score!! \n What is your name?");
-                            alert(winner + " has maximum score of " + score * 100);
+                            const { value: winner } = await Swal.fire({
+                                title: 'Congrats! You have surpassed the maximum score',
+                                input: 'text',
+                                inputLabel: 'Your name:',
+                                inputPlaceholder: 'Enter your name',
+                            });
+                              
+                            if (winner) {
+                                await Swal.fire(`Entered name: ${winner}`);
+                            }
+                            await Swal.fire(`${winner} has maximum score of ${score*100}`); //winner + " has maximum score of " + score * 100
                         }
                         else{
-                            alert(" You have reached a score of " + (score * 100) + ". Max score is: " + (maxScore * 100));
-                            alert(winner + " has maximum score of " + maxScore * 100);
+                            await Swal.fire(`You have reached a score of ${score * 100}. Max score is: ${maxScore * 100}`);
+                            await Swal.fire(`${winner} has maximum score of ${maxScore * 100}`);
                         }
                         storeWin(rod1Name, winner, score);
                     }
@@ -158,18 +193,28 @@ function toMove(e) {
 
                 // Check for Rod 2
                 else if ((ballY + ballDia) >= (windowHeight - rod2Height)) {
-                    ballSpeedY = -ballSpeedY; // Reverses the direction
+                    ballSpeedY = -ballSpeedY; //Reverses the direction
                     score++;
 
-                    // Check if the game ends
+                    //Check if the game ends
                     if ((ballPos < rod2X) || (ballPos > (rod2X + rod2Width))) {
+                        clearInterval(movement);
                         if(score > maxScore){
-                            winner = prompt("Congrats! You have surpassed the max-score!! \n What is your name?");
-                            alert(winner + " has maximum score of " + score * 100);
+                            const { value: winner } = await Swal.fire({
+                                title: 'Congrats! You have surpassed the maximum score',
+                                input: 'text',
+                                inputLabel: 'Your name:',
+                                inputPlaceholder: 'Enter your name',
+                            });
+                              
+                            if (winner) {
+                                await Swal.fire(`Entered name: ${winner}`);
+                            }
+                            await Swal.fire(`${winner} has maximum score of ${score*100}`); //winner + " has maximum score of " + score * 100
                         }
                         else{
-                            alert(" You have reached a score of " + (score * 100) + ". Max score is: " + (maxScore * 100));
-                            alert(winner + " has maximum score of " + maxScore * 100);
+                            await Swal.fire(`You have reached a score of ${score * 100}. Max score is: ${maxScore * 100}`);
+                            await Swal.fire(`${winner} has maximum score of ${maxScore * 100}`);
                         }
                         storeWin(rod2Name, winner, score);
                     }
