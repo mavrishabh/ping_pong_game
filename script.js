@@ -171,17 +171,18 @@ function toMove(e) {
                     if ((ballPos < rod1X) || (ballPos > (rod1X + rod1Width))) {
                         clearInterval(movement);
                         if(score > maxScore){
-                            const { value: winner } = await Swal.fire({
+                            const { value: winnerName } = await Swal.fire({
                                 title: 'Congrats! You have surpassed the maximum score',
                                 input: 'text',
                                 inputLabel: 'Your name:',
                                 inputPlaceholder: 'Enter your name',
                             });
                               
-                            if (winner) {
-                                await Swal.fire(`Entered name: ${winner}`);
+                            if (winnerName) {
+                                await Swal.fire(`Entered name: ${winnerName}`);
                             }
-                            await Swal.fire(`${winner} has maximum score of ${score*100}`); //winner + " has maximum score of " + score * 100
+                            await Swal.fire(`${winnerName} has maximum score of ${score*100}`);
+                            winner = winnerName; //winner + " has maximum score of " + score * 100
                         }
                         else{
                             await Swal.fire(`You have reached a score of ${score * 100}. Max score is: ${maxScore * 100}`);
@@ -200,17 +201,18 @@ function toMove(e) {
                     if ((ballPos < rod2X) || (ballPos > (rod2X + rod2Width))) {
                         clearInterval(movement);
                         if(score > maxScore){
-                            const { value: winner } = await Swal.fire({
+                            const { value: winnerName } = await Swal.fire({
                                 title: 'Congrats! You have surpassed the maximum score',
                                 input: 'text',
                                 inputLabel: 'Your name:',
                                 inputPlaceholder: 'Enter your name',
                             });
                               
-                            if (winner) {
-                                await Swal.fire(`Entered name: ${winner}`);
+                            if (winnerName) {
+                                await Swal.fire(`Entered name: ${winnerName}`);
                             }
-                            await Swal.fire(`${winner} has maximum score of ${score*100}`); //winner + " has maximum score of " + score * 100
+                            await Swal.fire(`${winnerName} has maximum score of ${score*100}`);
+                            winner = winnerName; //winner + " has maximum score of " + score * 100
                         }
                         else{
                             await Swal.fire(`You have reached a score of ${score * 100}. Max score is: ${maxScore * 100}`);
@@ -226,4 +228,6 @@ function toMove(e) {
     }
 
 };
-document.addEventListener('keypress',toMove);
+{
+    document.addEventListener('keypress',toMove);
+}
